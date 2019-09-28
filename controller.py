@@ -55,19 +55,18 @@ class Control(object):
 		'''handles all events'''
 		for event in pygame.event.get():
 			self.keys = pygame.key.get_pressed()
-			if event.type == pygame.QUIT or self.keys[pygame.K_ESCAPE]:
+			if event.type == pygame.QUIT or self.keys[pygame.K_ESCAPE]: # handle quit
 				self.done = True
-			elif event.type == pygame.JOYAXISMOTION:
+			elif event.type == pygame.JOYAXISMOTION: # handle joystick motion
 				if event.axis == 1:
 					self.left_motor = -round(self.joy.get_axis(1))
 				elif event.axis == 3:
 					self.right_motor = -round(self.joy.get_axis(3))
-			# handle events
-			# grab motion of sticks and update value with motion. 
+			
 	
 	def update(self):
 		'''update server'''
-		pass
+		pass 
 		
 	def message_display(self, text):
 		'''draw message to the display'''
@@ -109,8 +108,8 @@ def text_objects(text, font):
 def initialize_gamepad():
 	'''checks for gamepads and returns an intialized list of them if found'''
 	joystick = None
-	joystick = (pygame.joystick.Joystick(0))
-	if joystick:
+	if pygame.joystick.get_count():
+		joystick = (pygame.joystick.Joystick(0))
 		joystick.init() 
 	return joystick
 	
@@ -121,7 +120,9 @@ def main():
 	pygame.init()
 	pygame.display.set_caption(CAPTION)
 	pygame.display.set_mode(SCREEN_SIZE)
-	icon = pygame.image.load('rat.png')
+	dir_path = os.path.dirname(os.path.realpath(__file__))
+	print(dir_path)
+	icon = pygame.image.load(dir_path + '\\rat.png')
 	pygame.display.set_icon(icon)
 	
 	Control().main_loop()
@@ -131,6 +132,7 @@ def main():
 	
 
 if __name__ == '__main__':
+	
 	main()
 	
 	
