@@ -13,11 +13,12 @@
 
 
 
-# controller.py
+# single_controller.py
 # earthtowalt
 # 9/24/16
 # Controller file for the ratnet...
 # sets up pygame control scheme and server
+# CONTROLS SINGLE RAT
 
 import pygame
 import os, sys
@@ -29,7 +30,7 @@ SCREEN_SIZE = (320,200)
 BACKGROUND_COLOR = (0,0,0)
 ICON_FILE = 'rat.png'
 
-ip = '192.168.1.137'
+ip = '172.20.10.5'
 
 class Control(object):
 	'''Class defines methods for how the controller will interact with the rat'''
