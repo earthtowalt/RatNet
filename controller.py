@@ -78,8 +78,10 @@ class Control(object):
 
 	def motor_display(self):
 		'''Draw the values of the motors on the window'''
-		largeText = pygame.font.Font('freesansbold.ttf',20)
-		left_surface, right_surface, left_rect, right_rect = text_objects(str(self.left_motor), str(self.right_motor), largeText)
+		large_text = pygame.font.Font('freesansbold.ttf',20)
+		
+		left_surface, left_rect, = text_objects(str(self.left_motor), large_text)
+		right_surface, right_rect = text_objects(str(self.right_motor), large_text)
 		
 		left_rect.center = ((SCREEN_SIZE[0]/4),(SCREEN_SIZE[1]/2))
 		right_rect.center = ((SCREEN_SIZE[0] * 3 /4),(SCREEN_SIZE[1]/2))
@@ -94,11 +96,10 @@ class Control(object):
 			self.draw()
 			pygame.display.flip()
 			
-	
-def text_objects(l, r, font):
-	left_surface = font.render(l, True, (255,255,255))
-	right_surface = font.render(r, True, (255,255,255))
-	return left_surface, right_surface, left_surface.get_rect(),right_surface.get_rect()
+
+def text_objects(text, font):
+	text_surface = font.render(text, True, (255,255,255))
+	return text_surface, text_surface.get_rect()
 
 def initialize_gamepad():
 	'''checks for gamepads and returns an intialized list of them if found'''
