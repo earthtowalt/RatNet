@@ -49,14 +49,19 @@ class Control(object):
 		self.done = False
 		
 		# set up communication. 
-		
+	
 	
 	def event_loop(self):
 		'''handles all events'''
 		for event in pygame.event.get():
 			self.keys = pygame.key.get_pressed()
 			if event.type == pygame.QUIT or self.keys[pygame.K_ESCAPE]:
-				self.done = True 
+				self.done = True
+			elif event.type == pygame.JOYAXISMOTION:
+				if event.axis == 1:
+					self.left_motor = -round(self.joy.get_axis(1))
+				elif event.axis == 3:
+					self.right_motor = -round(self.joy.get_axis(3))
 			# handle events
 			# grab motion of sticks and update value with motion. 
 	
