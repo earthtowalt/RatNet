@@ -105,3 +105,6 @@ venv.bak/
 
 # temporary files
 research.txt
+
+# old reference code
+ref/
