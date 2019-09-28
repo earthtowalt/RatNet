@@ -24,9 +24,10 @@ import os, sys
 import math, random, time
 import socket
 
-CAPTION = "RAT CONTROLLER"
-SCREEN_SIZE = (400,400)
+CAPTION = 'RAT CONTROLLER'
+SCREEN_SIZE = (320,200)
 BACKGROUND_COLOR = (0,0,0)
+ICON_FILE = 'rat.png'
 
 ip = '192.168.1.137'
 
@@ -64,6 +65,7 @@ class Control(object):
 		pass
 		
 	def message_display(self, text):
+		'''draw message to the display'''
 		largeText = pygame.font.Font('freesansbold.ttf',115)
 		TextSurf, TextRect = text_objects(text, largeText)
 		TextRect.center = ((SCREEN_SIZE/2),(SCREEN_SIZE/2))
@@ -72,13 +74,18 @@ class Control(object):
 	def draw(self):
 		'''draw important elements''' # screen elements are left and right motor values printed in #fixme some fancy way
 		self.screen.fill(BACKGROUND_COLOR)
-		self.motor_display('hello world')
+		self.motor_display()
 
-	def motor_display(self, text):
+	def motor_display(self):
+		'''Draw the values of the motors on the window'''
 		largeText = pygame.font.Font('freesansbold.ttf',20)
-		TextSurf, TextRect = text_objects(text, largeText)
-		TextRect.center = ((SCREEN_SIZE[0]/2),(SCREEN_SIZE[1]/2))
-		self.screen.blit(TextSurf, TextRect)
+		left_surface, right_surface, left_rect, right_rect = text_objects(str(self.left_motor), str(self.right_motor), largeText)
+		
+		left_rect.center = ((SCREEN_SIZE[0]/4),(SCREEN_SIZE[1]/2))
+		right_rect.center = ((SCREEN_SIZE[0] * 3 /4),(SCREEN_SIZE[1]/2))
+		
+		self.screen.blit(left_surface, left_rect)
+		self.screen.blit(right_surface, right_rect)
 		
 	def main_loop(self):
 		'''main loop'''
@@ -88,9 +95,10 @@ class Control(object):
 			pygame.display.flip()
 			
 	
-def text_objects(text, font):
-    textSurface = font.render(text, True, (255,255,255))
-    return textSurface, textSurface.get_rect()
+def text_objects(l, r, font):
+	left_surface = font.render(l, True, (255,255,255))
+	right_surface = font.render(r, True, (255,255,255))
+	return left_surface, right_surface, left_surface.get_rect(),right_surface.get_rect()
 
 def initialize_gamepad():
 	'''checks for gamepads and returns an intialized list of them if found'''
@@ -107,6 +115,8 @@ def main():
 	pygame.init()
 	pygame.display.set_caption(CAPTION)
 	pygame.display.set_mode(SCREEN_SIZE)
+	icon = pygame.image.load('rat.png')
+	pygame.display.set_icon(icon)
 	
 	Control().main_loop()
 	
