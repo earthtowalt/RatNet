@@ -22,19 +22,30 @@ class LEDController:
 		
 	def connect(self):
 		'''attempt to open connection to ip:port'''
-		print('connecting...')
 		self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		try:
 			self.s.connect((self.IP, self.PORT))
 			return 0
 		except TimeoutError:
-			s.close()
+			self.s.close()
+			self.s = None
 			return 1
 	def led_on(self):
-		self.s.send(b'H')
+		try:
+			self.s.send(b'H')
+			return 0
+		except ConnectionResetError:
+			self.s.close()
+			return 1
+			
 	
 	def led_off(self):
-		self.s.send(b'L')
+		try:
+			self.s.send(b'L')
+			return 0
+		except ConnectionResetError:
+			self.s.close()
+			return 1
 		
 	def close(self):
 		self.s.close()

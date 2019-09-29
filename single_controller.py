@@ -55,6 +55,7 @@ class Control(object):
 		
 		# set up communication.
 		self.c = LEDController(IP, PORT)
+		print('connecting...')
 		while (self.c.connect()):
 			print('connection timeout, trying again..')
 		print('connected.')
@@ -72,6 +73,13 @@ class Control(object):
 					self.left_motor = -round(self.joy.get_axis(1))
 				elif event.axis == 3:
 					self.right_motor = -round(self.joy.get_axis(3))
+			elif event.type == pygame.JOYBUTTONDOWN:
+				if event.button == 7:
+					print('connecting...')
+					if (self.c.connect()):
+						print('connection failed')
+					else:
+						print('connected')
 			
 	
 	def update(self):
@@ -136,7 +144,6 @@ def main():
 	pygame.display.set_caption(CAPTION)
 	pygame.display.set_mode(SCREEN_SIZE)
 	dir_path = os.path.dirname(os.path.realpath(__file__))
-	print(dir_path)
 	icon = pygame.image.load(dir_path + '\\rat.png')
 	pygame.display.set_icon(icon)
 	
