@@ -24,13 +24,17 @@ import pygame
 import os, sys
 import math, random, time
 import socket
+from LEDController import LEDController
 
 CAPTION = 'RAT CONTROLLER'
 SCREEN_SIZE = (320,200)
 BACKGROUND_COLOR = (0,0,0)
 ICON_FILE = 'rat.png'
 
-ip = '172.20.10.5'
+IP = '10.67.92.82'
+PORT = 1337
+
+
 
 class Control(object):
 	'''Class defines methods for how the controller will interact with the rat'''
@@ -49,7 +53,12 @@ class Control(object):
 		# keep running loop.
 		self.done = False
 		
-		# set up communication. 
+		# set up communication.
+		self.c = LEDController(IP, PORT)
+		while (self.c.connect()):
+			print('connection timeout, trying again..')
+		print('connected.')
+			
 	
 	
 	def event_loop(self):
@@ -67,7 +76,10 @@ class Control(object):
 	
 	def update(self):
 		'''update server'''
-		pass 
+		if self.left_motor == 1:
+			self.c.led_on()
+		else:
+			self.c.led_off()
 		
 	def message_display(self, text):
 		'''draw message to the display'''
@@ -98,8 +110,10 @@ class Control(object):
 		'''main loop'''
 		while not self.done:
 			self.event_loop()
+			self.update()
 			self.draw()
 			pygame.display.flip()
+			pygame.time.wait(100)
 			
 
 def text_objects(text, font):
