@@ -31,8 +31,8 @@ SCREEN_SIZE = (320,200)
 BACKGROUND_COLOR = (0,0,0)
 ICON_FILE = 'rat.png'
 
-IP = '10.67.99.29'
-PORT = 1337
+IP = '172.20.10.5'
+PORT = 80
 
 
 
@@ -131,9 +131,14 @@ def text_objects(text, font):
 def initialize_gamepad():
 	'''checks for gamepads and returns an intialized list of them if found'''
 	joystick = None
-	if pygame.joystick.get_count():
-		joystick = (pygame.joystick.Joystick(0))
-		joystick.init() 
+	if not pygame.joystick.get_count(): 
+		print('please connect controller')
+	while not pygame.joystick.get_count():
+		print('.', end='')
+		pygame.time.wait(1000)
+		
+	joystick = (pygame.joystick.Joystick(0))
+	joystick.init() 
 	return joystick
 	
 def main():
