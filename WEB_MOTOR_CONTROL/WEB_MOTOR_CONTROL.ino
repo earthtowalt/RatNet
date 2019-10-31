@@ -18,6 +18,8 @@ const int a0 = 15;  //Gpio-15 of nodemcu esp8266
 const int a1 = 13;  //Gpio-13 of nodemcu esp8266    
 const int a2 = 12;  //Gpio-12 of nodemcu esp8266   
 const int a3 = 14;  //Gpio-14 of nodemcu esp8266 
+int lm = 0;
+int rm = 0;
 
 const int ledPin = 2;
 WiFiServer server(80);
@@ -34,9 +36,17 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);  // Initialize LED HIGH = OFF
 
+  //Declaring l293d control pins as Output
+  pinMode(a0, OUTPUT);     
+  pinMode(a1, OUTPUT);     
+  pinMode(a2, OUTPUT);
+  pinMode(a3, OUTPUT); 
+
   // Start TCP server.
   server.begin();
 
+  analogWrite(Pwm1, 777); // default to 50% duty
+  analogWrite(Pwm2, 777);
   
 }
 
@@ -63,11 +73,10 @@ void loop() {
       
       if (client.available()) {
         
-        char command = client.read();
+        String command = client.readStringUntil('\r');
         //Serial.println(command);
-        if (command == 'H') {
-          analogWrite(Pwm1, 512); // default to 50% duty
-          analogWrite(Pwm2, 512);
+        if (command == 'H' && go != 1) {
+          
           
           digitalWrite(LED_BUILTIN, LOW);     // LED LOW IS ON
           
@@ -76,15 +85,19 @@ void loop() {
           
           digitalWrite(a2, HIGH); // start second motor
           digitalWrite(a3, LOW);
+          
+          go = 1;
         }
         else if (command == 'L') {
           digitalWrite(LED_BUILTIN, HIGH);    // LED HIGH IS OFF
 
           digitalWrite(a0, LOW); // stop first motor
-          digitalWrite(a1, HIGH);
+          digitalWrite(a1, LOW);
           
           digitalWrite(a2, LOW); // stop second motor
-          digitalWrite(a3, HIGH);
+          digitalWrite(a3, LOW);
+
+          go = 0;
         }
       }
     }
