@@ -114,7 +114,7 @@ void loop() {
             rm = 0;
           }
         }
-        if (rm == lm == 0) digitalWrite(LED_BUILTIN, LOW);
+        if (rm == 0 && lm == 0) digitalWrite(LED_BUILTIN, HIGH);
       }
     }
     
