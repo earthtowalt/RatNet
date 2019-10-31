@@ -1,8 +1,9 @@
 /*
+ * WEB_MOTOR_CONTROL.ino
  * Date: 10/29/2019
  * earthtowalt
  * much of the motor control code is based off: https://www.engineersgarage.com/esp8266/nodemcu-and-l293d-motor-driver-controlling-dc-motor/ 
- * 
+ * Sets up nodeMCU control over two motors using l293d motor controller.
  */
 
 #include <ESP8266WiFi.h>
@@ -18,8 +19,8 @@ const int a0 = 15;  //Gpio-15 of nodemcu esp8266
 const int a1 = 13;  //Gpio-13 of nodemcu esp8266    
 const int a2 = 12;  //Gpio-12 of nodemcu esp8266   
 const int a3 = 14;  //Gpio-14 of nodemcu esp8266 
-int lm = 0;
-int rm = 0;
+short lm = 0;
+short rm = 0;
 
 const int ledPin = 2;
 WiFiServer server(80);
