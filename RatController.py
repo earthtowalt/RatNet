@@ -1,4 +1,8 @@
-# led controller optimized for use in 
+# RatController.py
+# earthtowalt
+# 10/30/16
+# Defines a class that opens a persistent tcp connection with a Rat esp module. 
+# The class provides an interface for sending motor controls through the connection. 
 
 import os
 import socket
@@ -55,10 +59,8 @@ class RatController:
 	def right_stop(self):
 		self.send_message(b'RO\r')
 	
-			
-	
-		
 	def close(self):
+		'''close the socket connection'''
 		self.s.close()
 		
 

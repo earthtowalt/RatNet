@@ -1,24 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # single_controller.py
 # earthtowalt
 # 9/24/16
 # Controller file for the ratnet...
-# sets up pygame control scheme and server
-# CONTROLS SINGLE RAT
+# sets up pygame interface for sending commands to a single rat. 
 
 import pygame
 import os, sys
@@ -63,7 +47,7 @@ class Control(object):
 	
 	
 	def event_loop(self):
-		'''handles all events'''
+		'''handles events. Updates motor variables with axes of joysticks'''
 		for event in pygame.event.get():
 			self.keys = pygame.key.get_pressed()
 			if event.type == pygame.QUIT or self.keys[pygame.K_ESCAPE]: # handle quit
@@ -83,7 +67,7 @@ class Control(object):
 			
 	
 	def update(self):
-		'''send motor controls'''
+		'''send motor controls based on state of motor variables'''
 		if self.left_motor == 1:
 			self.c.left_forward()
 		elif self.left_motor == -1:
