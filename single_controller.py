@@ -24,7 +24,7 @@ import pygame
 import os, sys
 import math, random, time
 import socket
-from LEDController import LEDController
+from RatController import RatController
 
 CAPTION = 'RAT CONTROLLER'
 SCREEN_SIZE = (320,200)
@@ -54,7 +54,7 @@ class Control(object):
 		self.done = False
 		
 		# set up communication.
-		self.c = LEDController(IP, PORT)
+		self.c = RatController(IP, PORT)
 		print('connecting...')
 		while (self.c.connect()):
 			print('connection timeout, trying again..')
@@ -83,11 +83,20 @@ class Control(object):
 			
 	
 	def update(self):
-		'''update server'''
+		'''send motor controls'''
 		if self.left_motor == 1:
-			self.c.led_on()
+			self.c.left_forward()
+		elif self.left_motor == -1:
+			self.c.left_backward()
 		else:
-			self.c.led_off()
+			self.c.left_stop()
+		
+		if self.right_motor == 1:
+			self.c.right_forward()
+		elif self.right_motor == -1:
+			self.c.right_backward()
+		else:
+			self.c.right_stop()
 		
 	def message_display(self, text):
 		'''draw message to the display'''
