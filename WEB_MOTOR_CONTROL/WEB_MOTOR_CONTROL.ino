@@ -75,37 +75,52 @@ void loop() {
         
         String command = client.readStringUntil('\r');
         //Serial.println(command);
-        if (command == 'H' && go != 1) {
-          
-          
+        if (command.indexOf('F') != -1) { // forward command
           digitalWrite(LED_BUILTIN, LOW);     // LED LOW IS ON
+          if (command.indexOf('L') != -1 && lm != 1) {  // start left motor forward
+            digitalWrite(a0, HIGH); 
+            digitalWrite(a1, LOW);
+            lm = 1;
+          }
+          else if (command.indexOf('R') != -1 && rm != 1) { // start right motor forward
+            digitalWrite(a2, HIGH); 
+            digitalWrite(a3, LOW);
+            rm = 1;
+          }
           
-          digitalWrite(a0, HIGH); // start first motor
-          digitalWrite(a1, LOW);
-          
-          digitalWrite(a2, HIGH); // start second motor
-          digitalWrite(a3, LOW);
-          
-          go = 1;
         }
-        else if (command == 'L') {
-          digitalWrite(LED_BUILTIN, HIGH);    // LED HIGH IS OFF
-
-          digitalWrite(a0, LOW); // stop first motor
-          digitalWrite(a1, LOW);
-          
-          digitalWrite(a2, LOW); // stop second motor
-          digitalWrite(a3, LOW);
-
-          go = 0;
+        else if (command.indexOf('B') != -1) { // backward command
+          digitalWrite(LED_BUILTIN, LOW);    // LED LOW IS ON
+          if (command.indexOf('L') != -1 && lm != -1) {  // start left motor backward
+            digitalWrite(a0, LOW); 
+            digitalWrite(a1, HIGH); 
+            lm = -1;
+          }
+          else if (command.indexOf('R') != -1 && rm != -1) {  // start right motor backward
+            digitalWrite(a2, LOW); 
+            digitalWrite(a3, HIGH);
+            rm = -1;
+          }
         }
+        else if (command.indexOf('O') != -1) { // motor off command
+          if (command.indexOf('L') != -1 && lm != 0) {  // stop left motor
+            digitalWrite(a0, LOW); 
+            digitalWrite(a1, LOW); 
+            lm = 0;
+          }
+          else if (command.indexOf('R') != -1 && rm != 0) {  // stop right motor
+            digitalWrite(a2, LOW); 
+            digitalWrite(a3, LOW);
+            rm = 0;
+          }
+        }
+        if (rm == lm == 0) digitalWrite(LED_BUILTIN, LOW);
       }
     }
     
     Serial.println("Client disconnected.");
     client.stop();
   }  
-  //blinkLED();
   delay(200);
 }
 void printWiFiStatus() {
