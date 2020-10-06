@@ -7,3 +7,8 @@ much of the hardware design was taken from this tutorial: https://www.engineersg
 **Implementation:**
 + Pygame based control system with either keyboard or game controller input
 + wireless communication with esp chip on rat board through TCP connection over local network
+
+**Future:**
++ clean up message sending protocol
++ switch to UDP connection
++ control multiple rats
