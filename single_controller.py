@@ -15,7 +15,7 @@ SCREEN_SIZE = (320,200)
 BACKGROUND_COLOR = (0,0,0)
 ICON_FILE = 'rat.png'
 
-IP = '172.20.10.5'
+IP = '10.0.0.117'
 PORT = 80
 
 

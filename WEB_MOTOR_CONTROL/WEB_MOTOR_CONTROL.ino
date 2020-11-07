@@ -8,8 +8,8 @@
 
 #include <ESP8266WiFi.h>
 
-const char* ssid = "David's iPhone";
-const char* password = "projectwifi";
+const char* ssid = "Flatball Stars";
+const char* password = "CrocNSocks?123";
 
 const uint8_t Pwm1 = D1; //Nodemcu PWM pin 
 const uint8_t Pwm2 = D2; //Nodemcu PWM pin
@@ -46,8 +46,8 @@ void setup() {
   // Start TCP server.
   server.begin();
 
-  analogWrite(Pwm1, 777); // default to 50% duty
-  analogWrite(Pwm2, 777);
+  analogWrite(Pwm1, 1200); // 777 is 50% duty
+  analogWrite(Pwm2, 1200);
   
 }
 
