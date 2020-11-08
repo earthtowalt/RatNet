@@ -7,6 +7,9 @@
  */
 
 #include <ESP8266WiFi.h>
+#include <Servo.h>
+
+Servo servo;
 
 const char* ssid = "Flatball Stars";
 const char* password = "CrocNSocks?123";
@@ -21,6 +24,7 @@ const int a2 = 12;  //Gpio-12 of nodemcu esp8266
 const int a3 = 14;  //Gpio-14 of nodemcu esp8266 
 short lm = 0;
 short rm = 0;
+short j = 0;
 
 const int ledPin = 2;
 WiFiServer server(80);
@@ -36,6 +40,8 @@ void setup() {
   // Configure GPIO2 as OUTPUT.
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);  // Initialize LED HIGH = OFF
+
+  servo.attach(4); //D4
 
   //Declaring l293d control pins as Output
   pinMode(a0, OUTPUT);     
@@ -115,6 +121,18 @@ void loop() {
             rm = 0;
           }
         }
+        else if (command.indexOf('J') != -1 && command.indexOf('U') != -1 && j != 90) {
+          servo.write(90);
+          Serial.println("JU");
+          j = 90;
+        }
+        else if (command.indexOf('J') != -1 && command.indexOf('D') != -1 && j != 0) {
+          servo.write(0);
+          Serial.println("JD");
+          Serial.println(command);
+          j = 0;
+        }
+        
         if (rm == 0 && lm == 0) digitalWrite(LED_BUILTIN, HIGH);
       }
     }

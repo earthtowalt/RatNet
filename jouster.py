@@ -2,26 +2,31 @@
 # earthtowalt
 # 9/24/16
 # Controller file for the ratnet...
-# sets up pygame interface for sending commands to a single rat. 
+# sets up pygame interface for sending commands to a single rat.
+
+import math
+import os
+import random
+import socket
+import sys
+import time
 
 import pygame
-import os, sys
-import math, random, time
-import socket
-from RatController import RatController
+
+from udpcontrolprotocol import UdpControlProtocol
 
 CAPTION = 'RAT CONTROLLER'
-SCREEN_SIZE = (320,200)
-BACKGROUND_COLOR = (0,0,0)
+SCREEN_SIZE = (320, 200)
+BACKGROUND_COLOR = (0, 0, 0)
 ICON_FILE = 'rat.png'
 
-IP = '10.0.0.117'
-PORT = 80
-
+RAT_IP = '10.0.0.117'
+RAT_PORT = 4210
 
 
 class Control(object):
 	'''Class defines methods for how the controller will interact with the rat'''
+
 	def __init__(self):
 		'''initialize controls and communication stuff'''
 		# init screen
@@ -31,66 +36,53 @@ class Control(object):
 		self.keys = pygame.key.get_pressed()
 		# setup joystick, if not joysticks found, then joy=None
 		self.joy = initialize_gamepad()
-		# left motor and right motor values 
+		# left motor and right motor values
 		self.left_motor = 0
 		self.right_motor = 0
-		self.joust = 0
 		# keep running loop.
 		self.done = False
-		
+
 		# set up communication.
-		self.c = RatController(IP, PORT)
-		print('connecting...')
-		while (self.c.connect()):
-			print('connection timeout, trying again..')
-		print('connected.')
-			
-	
-	
+		self.connection = UdpControlProtocol(RAT_IP, RAT_PORT)
+
 	def event_loop(self):
 		'''handles events. Updates motor variables with axes of joysticks'''
 		for event in pygame.event.get():
 			self.keys = pygame.key.get_pressed()
-			if event.type == pygame.QUIT or self.keys[pygame.K_ESCAPE]: # handle quit
+			if event.type == pygame.QUIT or self.keys[pygame.K_ESCAPE]:  # handle quit
 				self.done = True
-			elif event.type == pygame.JOYAXISMOTION: # handle joystick motion
+			elif event.type == pygame.JOYAXISMOTION:  # handle joystick motion
 				if event.axis == 1:
 					self.left_motor = -round(self.joy.get_axis(1))
 				elif event.axis == 3:
 					self.right_motor = -round(self.joy.get_axis(3))
 			elif event.type == pygame.JOYBUTTONDOWN:
-				if event.button == 7:
-					print('connecting...')
-					if (self.c.connect()):
-						print('connection failed')
-					else:
-						print('connected')
 				if event.button == 4:
-					self.joust = 1
+					self.left_button = 1
 				if event.button == 5:
-					self.joust = 0
+					self.right_button = 1
+			elif event.type == pygame.JOYBUTTONUP:
+				if event.button == 4:
+					self.left_button = 0
+				if event.button == 5:
+					self.right_button = 0
 			
 	
 	def update(self):
 		'''send motor controls based on state of motor variables'''
 		if self.left_motor == 1:
-			self.c.left_forward()
+			self.connection.left_forward()
 		elif self.left_motor == -1:
-			self.c.left_backward()
+			self.connection.left_backward()
 		else:
-			self.c.left_stop()
+			self.connection.left_stop()
 		
 		if self.right_motor == 1:
-			self.c.right_forward()
+			self.connection.right_forward()
 		elif self.right_motor == -1:
-			self.c.right_backward()
+			self.connection.right_backward()
 		else:
-			self.c.right_stop()
-		
-		if self.joust == 1:
-			self.c.joust_up()
-		if self.joust == 0:
-			self.c.joust_down()
+			self.connection.right_stop()
 		
 	def message_display(self, text):
 		'''draw message to the display'''
@@ -147,7 +139,7 @@ def initialize_gamepad():
 def main():
 	'''prepare display and start program'''
 	os.environ['SLD_VIDEO_CENTERED'] = '1'
-	#pygame window setup 
+	# pygame window setup 
 	pygame.init()
 	pygame.display.set_caption(CAPTION)
 	pygame.display.set_mode(SCREEN_SIZE)
@@ -164,18 +156,3 @@ def main():
 if __name__ == '__main__':
 	
 	main()
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	

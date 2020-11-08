@@ -58,6 +58,12 @@ class RatController:
 		self.send_message(b'RB\r')
 	def right_stop(self):
 		self.send_message(b'RO\r')
+
+	def joust_up(self):
+		self.send_message(b'JU\r')
+	def joust_down(self):
+		self.send_message(b'JD\r')
+
 	
 	def close(self):
 		'''close the socket connection'''
